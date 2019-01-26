@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Print'eth'Receipt</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
+</head>
+<style>
+  input {
+      display: block;
+      margin-bottom: 12px;
+    }
+  </style>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <h1>Print a Receipt via the Blockchain &amp; Help!</h1>
+        <h2>How it works?</h2>
+        <p>Link to YouTube Presentation</p>
+        <p>You send a message, that gets printed</p>
+        <p>This will be directly donated to <a href="https://givedirectly.org/">GiveDirectly</a>. I'm not sitting in between anything, everything will be straight forwarded.</p>
+
+        <h2>Send a Message with Love</h1>
+          <form>
+            <div class="form-group">
+              <label for="amount">Amount in Ether:</label>
+              <input type="text" class="form-control" id="amount" placeholder="e.g. 1" />
+            </div>
+            <div class="form-group">
+              <label for="message">My Message to the World:</label>
+              <input type="text" class="form-control" id="message" placeholder="I wish you all the best!" />
+            </div>
+            <button class="form-control" onclick="App.sendDonation();return false;">Print Receipt</button>
+          </form>
+
+          <br />
+          <p id="status"></p>
+          <hr />
+          <h3>Donors List with Messages:</h3>
+          <textarea class="form-control" disabled="disabled" id="donorsList"  rows="10" ></textarea>
+          <hr />
+          <p class="small">
+            <strong>Disclaimer:</strong> 
+            
+            TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, ALL WARRANTIES—INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF DURABILITY, NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A PARTICULAR PURPOSE—ARE EXPRESSLY DISCLAIMED. 
+            All content available through this Web Site is provided on an “AS IS” and “AS AVAILABLE” basis, with all faults. 
+            I make no warranty or representation with respect to the quality, accuracy, or availability of the Web Site or any of its content. The foregoing disclaimer includes, without limitation, a disclaimer of any warranty or representation that the Web Site will be uninterrupted, reliable, secure, or error-free; that the Web Site or our servers are free of viruses or other harmful components; or that the Web Site will otherwise meet your expectations.
+
+Any information sent to the smart contract, the Ethereum Blockchain or this website is not secure and is done so on a non-confidential basis.
+          </p>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <script src="index.js"></script>
+  <script type="text/javascript">
+    var self = this;
+    window.addEventListener("build", function() {
+        App.listDonors();
+       
+    });
+
+    </script>
+</body>
+
+</html>

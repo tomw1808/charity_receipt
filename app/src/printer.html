@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Print'eth'Receipt</title>
+    
+    <script type='text/javascript' src='/StarWebPrintBuilder.js?v=2'></script>
+    <script type='text/javascript' src='/StarWebPrintTrader.js?v=2'></script>
+    <script>
+    
+    function encodeEscapeSequence(data) {
+            var regexp = /\\[tnr\\]/g;
+
+            if (regexp.test(data)) {
+                data = data.replace(regexp, function (match) {
+                    switch (match) {
+                        case '\\t' :
+                            return '\\x09';
+                        case '\\n' :
+                            return '\\x0a';
+                        case '\\r' :
+                            return '\\x0d';
+                    }
+
+                    return '\\x5c';
+                });
+            }
+
+            var regexp = /\\[Xx][0-9A-Fa-f]{2}/g;
+
+            if (regexp.test(data)) {
+                data = data.replace(regexp, function (match) {
+                    return String.fromCharCode(parseInt(match.slice(2), 16));
+                });
+            }
+
+            return data;
+        }
+
+        function startPrint(text, qr) {
+            var builder = new StarWebPrintBuilder();
+
+            var model = "model2";
+            var level = "level_l";
+            var cell = 8;
+            //var data = '_R1-AT0_DEMO-CASH-BOX817_83468_2015-11-25T19:20:10_0,00_0,00_0,00_0,00_0,00_sqv3XHcI8mU=_-3667961875706356849_d3YUbS4CoRo=_7xi1XGF613+KuNA65Ov7fVnRPuw3aFfuSy0mKpXsSaCvRLw+zNKaH0rcifAYRBTxsqsKDoi9v4+4rchs/CI3SQ==';
+
+            
+
+            var request = "";
+
+            request += builder.createAlignmentElement({position: "center"});
+            request += builder.createTextElement({
+                codepage: 'blank',
+                international: 'germany',
+                characterspace: 0,
+                emphasis: false,
+                invert: false,
+                linespace: 32,
+                width: 1,
+                height: 1,
+                font: 'font_a',
+                underline: false,
+                data: text
+            });
+
+            request += builder.createQrCodeElement({
+                model: model,
+                level: level,
+                cell: cell,
+                data: encodeEscapeSequence(qr)
+            });
+            builder.createTextElement({
+                codepage: 'utf8',
+                international: 'usa',
+                characterspace: 0,
+                emphasis: false,
+                invert: false,
+                linespace: 32,
+                width: 1,
+                height: 1,
+                font: 'font_a',
+                underline: false,
+                data: '\n\n-----------------------\n\n'
+            });
+
+            request += builder.createCutPaperElement({feed: 'true', type: 'full'});
+
+            var trader_url = "http://localhost:8001/StarWebPRNT/SendMessage";
+            var papertype = "normal";
+            var blackmark_sensor = "front_side";
+            var trader = new StarWebPrintTrader({
+                url: trader_url,
+                papertype: papertype,
+                blackmark_sensor: blackmark_sensor
+            });
+
+            trader.onReceive = function (response) {
+                //alert(response)?? Success/Error
+            }
+
+            trader.onError = function (response) {
+                //hideNowPrinting();
+
+                var msg = '- onError -\n\n';
+
+                msg += '\tStatus:' + response.status + '\n';
+
+                msg += '\tResponseText:' + response.responseText;
+
+                alert(msg);
+            }
+
+            trader.sendMessage({request: request});
+        }
+</script>
+  </head>
+  <style>
+    input {
+      display: block;
+      margin-bottom: 12px;
+    }
+  </style>
+  <body>
+    <h1>Print a Receipt via the Blockchain</h1>
+
+    <p id="status"></p>
+    <p>
+      <strong>Hint:</strong> open the browser developer console to view any
+      errors and warnings.
+    </p>
+    <button onclick="startPrint('Test Text', 'bla');">Test Receipt</button>
+    <script  src="index.js"></script>
+    <script type="text/javascript">
+    var self = this;
+    window.addEventListener("build", function() {
+        var instance = App.getMeta();
+        console.dir(instance);
+        document.getElementById('status').innerHTML = "Got Meta";
+        //contract.then(instance => {
+        instance.events.SendReceipt({fromBlock:'latest'}, function(error, event) {
+            App.addToStatus(event.returnValues._message);
+            self.startPrint(web3.utils.fromWei(event.returnValues._amount.toString(),'ether') + " Ether\r\n" + "From: "+event.returnValues._from+"\r\n-----------------------\r\n" + event.returnValues._message,'https://etherscan.io/tx/'+event.transactionHash);
+        });
+        instance.getPastEvents('SendReceipt', {fromBlock:0, toBlock:'latest'}).then(events => {
+            events.forEach(element => {
+                App.addToStatus(App.getWeb3().utils.fromWei(element.returnValues._amount.toString(),'ether') + " Ether<br />" + "From: "+element.returnValues._from+"<br>-----------------------<br>" + element.returnValues._message);
+            });
+        });
+        //})
+       
+    });
+
+    </script>
+  </body>
+</html>
