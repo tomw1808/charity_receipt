@@ -129,10 +129,13 @@
       errors and warnings.
     </p>
     <button onclick="App.testPrint();">Test Receipt</button>
+    <button onclick="App.printLastReceipt();">Print Last Receipt</button>
     <script  src="index.js"></script>
     <script type="text/javascript">
     App.listenPrinter();
-
+    setInterval(function() {
+                  window.location.reload();
+                }, 600000); 
     </script>
   </body>
 </html>
