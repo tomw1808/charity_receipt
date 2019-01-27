@@ -3,8 +3,8 @@
   <head>
     <title>Print'eth'Receipt</title>
     
-    <script type='text/javascript' src='/StarWebPrintBuilder.js?v=2'></script>
-    <script type='text/javascript' src='/StarWebPrintTrader.js?v=2'></script>
+    <script type='text/javascript' src='StarWebPrintBuilder.js?v=2'></script>
+    <script type='text/javascript' src='StarWebPrintTrader.js?v=2'></script>
     <script>
     
     function encodeEscapeSequence(data) {
@@ -69,7 +69,7 @@
                 cell: cell,
                 data: encodeEscapeSequence(qr)
             });
-            builder.createTextElement({
+            request += builder.createTextElement({
                 codepage: 'utf8',
                 international: 'usa',
                 characterspace: 0,
@@ -128,28 +128,14 @@
       <strong>Hint:</strong> open the browser developer console to view any
       errors and warnings.
     </p>
-    <button onclick="startPrint('Test Text', 'bla');">Test Receipt</button>
+    <button onclick="App.testPrint();">Test Receipt</button>
+    <button onclick="App.printLastReceipt();">Print Last Receipt</button>
     <script  src="index.js"></script>
     <script type="text/javascript">
-    var self = this;
-    window.addEventListener("build", function() {
-        var instance = App.getMeta();
-        console.dir(instance);
-        document.getElementById('status').innerHTML = "Got Meta";
-        //contract.then(instance => {
-        instance.events.SendReceipt({fromBlock:'latest'}, function(error, event) {
-            App.addToStatus(event.returnValues._message);
-            self.startPrint(web3.utils.fromWei(event.returnValues._amount.toString(),'ether') + " Ether\r\n" + "From: "+event.returnValues._from+"\r\n-----------------------\r\n" + event.returnValues._message,'https://etherscan.io/tx/'+event.transactionHash);
-        });
-        instance.getPastEvents('SendReceipt', {fromBlock:0, toBlock:'latest'}).then(events => {
-            events.forEach(element => {
-                App.addToStatus(App.getWeb3().utils.fromWei(element.returnValues._amount.toString(),'ether') + " Ether<br />" + "From: "+element.returnValues._from+"<br>-----------------------<br>" + element.returnValues._message);
-            });
-        });
-        //})
-       
-    });
-
+    App.listenPrinter();
+    setInterval(function() {
+                  window.location.reload();
+                }, 600000); 
     </script>
   </body>
 </html>

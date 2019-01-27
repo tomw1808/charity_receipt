@@ -17,12 +17,13 @@
   <div class="container">
     <div class="row">
       <div class="col-sm">
-        <h1>Print a Receipt via the Blockchain &amp; Help!</h1>
+        <h1>Blockchain Receipts for Charity!</h1>
+        <p id="balance"></p>
         <h2>How it works?</h2>
-        <p>Link to YouTube Presentation</p>
-        <p>You send a message, that gets printed</p>
-        <p>This will be directly donated to <a href="https://givedirectly.org/">GiveDirectly</a>. I'm not sitting in between anything, everything will be straight forwarded.</p>
-
+        <p><a href="https://youtu.be/HsKHLEX4CI4" target="_blank">Quick Video Walkthrough</a></p>
+        <p>You send a message, that gets printed. Each Receipt costs at least 0.1 Ether (minimum Donation). This will be directly donated to <a href="https://givedirectly.org/">GiveDirectly</a>. I'm not sitting in between anything, everything will be straight forwarded. Checkout the Source <a href="https://github.com/tomw1808/charity_receipt" target="_blank">on GitHub!</a></p>
+        <h2>Live Feed:</h2>
+        <iframe width="100%" height="500" src="https://www.youtube.com/embed/gxxOU5sgpfo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <h2>Send a Message with Love</h1>
           <form>
             <div class="form-group">
@@ -33,7 +34,7 @@
               <label for="message">My Message to the World:</label>
               <input type="text" class="form-control" id="message" placeholder="I wish you all the best!" />
             </div>
-            <button class="form-control" onclick="App.sendDonation();return false;">Print Receipt</button>
+            <button class="form-control" onclick="App.sendDonation();return false;">Transfer &amp; Print Receipt</button>
           </form>
 
           <br />
@@ -42,6 +43,12 @@
           <h3>Donors List with Messages:</h3>
           <textarea class="form-control" disabled="disabled" id="donorsList"  rows="10" ></textarea>
           <hr />
+          <p><strong>Known Problems:</strong>
+            <ol>
+              <li>The Star WebPRNT App doesn't have access to a console. That means debugging is a pain. Whatever I tried, it will loose the connection every 10-15 minutes to the Infura Websocket Server. So, instead of very complicated tries to reconnect, I opted for a page-refresh every 10 minutes. This takes around 500ms - if your donation is sent at exactly this time it's not printed. But thanks for it anyways.</li>
+              <li>I tried to use Web3 Beta-38, which might fixes this issue, but get weird errors in combination with WebPack. Now, I'm not a webpack pro, so I went back to Web3 Beta-37</li>
+              <li>I will try to keep things running, but don't blame me if they go down. It should be usable in production, but you never know...</li>
+            </ol></p>
           <p class="small">
             <strong>Disclaimer:</strong> 
             
@@ -51,6 +58,8 @@
 
 Any information sent to the smart contract, the Ethereum Blockchain or this website is not secure and is done so on a non-confidential basis.
           </p>
+          
+          <p class="small text-center">Made with Love from <a href="https://vomtom.at" target="_blank">vomtom.at</a></p>
       </div>
     </div>
 

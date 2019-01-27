@@ -6,7 +6,7 @@ contract StarWebprint {
     mapping(uint => address) public messageIdFromMapping;
     uint public numDonors;
     uint public totalEarned;
-    address payable public donateTo = 0x4Ff8031b9052915C86c771C1CDC53E9441f24A40;
+    address payable public donateTo = 0xc7464dbcA260A8faF033460622B23467Df5AEA42;
 
     function sendNewMessage(string memory message) public payable {
         require(totalEarned <= totalEarned+msg.value, 'Integer Overflow, Aborting');
